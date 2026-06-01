@@ -1,30 +1,28 @@
-# Agent brief (example)
+# Agent brief
 
 > Replace this file with your own. The driver reads its path from
 > the positional `program` arg and tells the agent to read it +
-> follow its contract each iteration. The contract is yours to
-> define — `cli_autoresearch` makes no assumptions about what
-> "an iteration" produces.
+> follow whatever it says, each iteration.
 
-## Example contract
+You're being driven in a loop. On every iteration you'll receive
+the same prompt pointing back at this file. Use the file to decide
+what one iteration should do.
 
-Each iteration:
+A common shape:
 
-1. Read any operator notes (e.g. `notes.md`, `votes.jsonl`, …) —
-   you define where.
-2. Pick ONE direction to work for ~5–15 minutes.
-3. Produce a candidate (a `.py` file, a `.frag` shader, a
-   `results.tsv` row, an ONNX checkpoint — whatever fits your
-   project).
-4. Score / log it so the next iteration knows what's been tried.
-5. Exit. Driver loops back.
+1. **Look around** — read any state files in the cwd, scan for
+   progress, see what's been done already.
+2. **Do ONE small thing** — typically a few minutes of work, not
+   the whole task.
+3. **Record what you did** — leave a trail (a log line, a new file,
+   an updated state file) so the next iteration knows where to
+   continue from.
+4. **Exit.** The driver loops you back.
 
-Optional discipline a project might enforce:
+Pick a stop condition: "when the goal state file says done", "when
+the queue is empty", "after N iterations" — whatever fits. Write
+that into this file.
 
-- Every artefact tagged with `"agent"` + `"model"` fields so
-  multi-agent loops are attributable.
-- A `STARTING_COMMIT` file + `prepare.sh` setup script + per-iter
-  `results.tsv` row for full reproducibility (chroma_reproj
-  pattern).
-- Stop gracefully and write a "blocked" note rather than spinning
-  if the bench harness or input data isn't ready yet.
+Anything else (file layout, scoring, naming conventions, agent
+identity tags, schemas) is your project's call — `cli_autoresearch`
+doesn't impose anything.
