@@ -10,6 +10,27 @@ stdlib only. Whatever the agent reads / writes / scores is your
 `program.md`'s business — the driver just hands it the prompt and
 streams output.
 
+## ⚠ Permission model
+
+**All four backends are invoked with their "skip permission" /
+"bypass approval" flags ON by default**, so the agent can run
+shell commands, edit files, install things, etc. without per-
+action prompts. This is required for an unattended loop — but
+means the agent can do anything within `--cwd` (and outside it,
+depending on the backend) without asking.
+
+| Backend | Flag set by `run.py` |
+|---|---|
+| `claude` | `--dangerously-skip-permissions` |
+| `codex` | `--dangerously-bypass-approvals-and-sandbox` |
+| `agy` (antigravity) | `--dangerously-skip-permissions` |
+| `copilot` | `--allow-all-tools` |
+
+Run inside a disposable working dir, a VM, or a container if the
+agent's blast radius is a concern. There's no way to "softly" run
+the loop today — disabling these flags causes the agent to stall
+on the first tool prompt with no operator to answer it.
+
 ## Usage
 
 ```bash
