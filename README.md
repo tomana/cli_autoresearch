@@ -6,8 +6,9 @@ calls it until `--minutes` expires or you Ctrl+C. Detects claude
 rate-limits + codex credit depletion mid-loop and recovers
 (wait-for-reset / tier-degrade) instead of stopping.
 
-stdlib only. No GUI, no picker, no project assumptions — whatever
-the agent reads / writes / scores is your `program.md`'s business.
+stdlib only. Whatever the agent reads / writes / scores is your
+`program.md`'s business — the driver just hands it the prompt and
+streams output.
 
 ## Usage
 
