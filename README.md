@@ -42,6 +42,39 @@ uv run run.py --cwd /path/to/your/project program.md
 
 Codex fallback chain editable in `run.py` (`CODEX_MODELS = […]`).
 
+## What gets written to disk
+
+**`run.py` itself writes nothing.** No run dirs, no logs, no
+state. It only spawns the agent and streams stdout back to your
+terminal.
+
+Files that *do* appear during a loop:
+
+| Source | What | Where |
+|---|---|---|
+| The agent (per `program.md`) | Whatever your brief asks it to produce — code, manifests, score files, etc. | `--cwd` |
+| codex CLI | Session rollouts the driver scans for credit depletion | `~/.codex/sessions/rollout-*.jsonl` |
+| claude CLI | Nothing in `--print` mode (default) | — |
+| agy CLI | Nothing in `--print` mode | — |
+
+If you want a transcript of the loop, redirect stdout:
+
+```bash
+uv run run.py program.md > /tmp/loop.log 2>&1
+```
+
+Or `tee` it if you want both:
+
+```bash
+uv run run.py program.md 2>&1 | tee /tmp/loop.log
+```
+
+## Example
+
+See [`example_cpp/`](example_cpp/) for a minimal C++ target with a
+`CMakeLists.txt` + `main.cpp` + per-iteration `program.md`. Showcases
+the `--cwd` flag.
+
 ## License
 
 MIT.
