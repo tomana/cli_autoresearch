@@ -23,6 +23,12 @@ Pick a stop condition: "when the goal state file says done", "when
 the queue is empty", "after N iterations" — whatever fits. Write
 that into this file.
 
+One pattern worth considering: have the agent keep a `NOTES.md` it
+**reads at the start** + **appends one line to at the end** of each
+iter (what was tried, what happened, would-you-repeat). Cheap
+institutional memory across iters with zero driver involvement —
+the agent self-documents.
+
 Anything else (file layout, scoring, naming conventions, agent
 identity tags, schemas) is your project's call — `cli_autoresearch`
 doesn't impose anything.
