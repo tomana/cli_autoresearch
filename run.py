@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """run.py — loop a coding-agent CLI on a brief, within a wall-clock budget.
 
-Single-file driver. Picks one of claude / codex / agy, calls it
-repeatedly until --minutes expires or you Ctrl+C. Detects claude
-rate-limits + codex credit depletion mid-loop and either waits or
-degrades to a cheaper codex tier instead of stopping.
+Single-file driver. Picks one of claude / codex / agy / copilot,
+calls it repeatedly until --minutes expires or you Ctrl+C. Detects
+claude rate-limits + codex credit depletion mid-loop and either
+waits or degrades to a cheaper codex tier instead of stopping.
 
 Whatever the agent reads / writes / scores is your project's
 business — the driver just hands it the prompt and harvests output.
@@ -12,7 +12,8 @@ business — the driver just hands it the prompt and harvests output.
 Usage:
     uv run run.py program.md                            # claude, 30 min
     uv run run.py --agent codex --minutes 60 program.md
-    uv run run.py --agent antigravity program.md
+    uv run run.py --agent agy program.md
+    uv run run.py --agent copilot program.md
 """
 
 import argparse
@@ -70,6 +71,13 @@ def build_cmd(agent: str, prompt: str, cwd: Path) -> list[str]:
     if agent == "antigravity":
         return ["agy", "--dangerously-skip-permissions",
                 "--add-dir", str(cwd), "--print", prompt]
+    if agent == "copilot":
+        # GitHub Copilot CLI. --allow-all-tools is the equivalent of
+        # claude --dangerously-skip-permissions / codex bypass /
+        # agy --dangerously-skip-permissions. --no-color keeps stdout
+        # free of ANSI escape codes so the streamed output is parseable.
+        return ["copilot", "-p", prompt, "--allow-all-tools",
+                "--add-dir", str(cwd), "--no-color"]
     raise ValueError(f"unknown agent: {agent}")
 
 
@@ -195,7 +203,8 @@ def loop(agent: str, program: Path, cwd: Path, minutes: int):
 def main():
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("program", help="Path to the agent's brief (program.md).")
-    p.add_argument("--agent", choices=["claude", "codex", "antigravity", "agy"],
+    p.add_argument("--agent",
+                   choices=["claude", "codex", "antigravity", "agy", "copilot"],
                    default="claude")
     p.add_argument("--minutes", type=int, default=30)
     p.add_argument("--cwd", default=".", help="Agent's working directory.")

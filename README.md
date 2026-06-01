@@ -1,9 +1,9 @@
 # cli_autoresearch
 
 Tiny single-file Python driver to **loop a coding-agent CLI on a
-brief for a wall-clock budget**. Picks one of claude / codex / agy,
-calls it until `--minutes` expires or you Ctrl+C. Detects claude
-rate-limits + codex credit depletion mid-loop and recovers
+brief for a wall-clock budget**. Picks one of claude / codex / agy /
+copilot, calls it until `--minutes` expires or you Ctrl+C. Detects
+claude rate-limits + codex credit depletion mid-loop and recovers
 (wait-for-reset / tier-degrade) instead of stopping.
 
 stdlib only. Whatever the agent reads / writes / scores is your
@@ -19,6 +19,7 @@ cd cli_autoresearch
 uv run run.py program.md                          # claude, 30 min
 uv run run.py --agent codex --minutes 60 program.md
 uv run run.py --agent agy program.md
+uv run run.py --agent copilot program.md
 uv run run.py --cwd /path/to/your/project program.md
 ```
 
@@ -27,7 +28,7 @@ uv run run.py --cwd /path/to/your/project program.md
 | Flag | Default | What |
 |---|---|---|
 | (positional) `program` | required | path to the brief the agent reads each iteration |
-| `--agent claude\|codex\|agy` | `claude` | which CLI |
+| `--agent claude\|codex\|agy\|copilot` | `claude` | which CLI |
 | `--minutes N` | `30` | wall-clock budget |
 | `--cwd PATH` | `.` | agent's working directory |
 | `--model ID` | (codex) flagship | pin a single codex model; disables tier fallback |
@@ -39,6 +40,7 @@ uv run run.py --cwd /path/to/your/project program.md
 | `claude` | `claude-opus-4-8` | none | rate-limit reset detected via stdout regex, waits + restarts budget |
 | `codex` | `gpt-5.5-pro` | → `gpt-5.5` → `gpt-5.4-mini` | scans `~/.codex/sessions/rollout-*.jsonl` for `credits.has_credits=false` and degrades the active tier |
 | `agy` (antigravity) | google default | none | (no built-in recovery) |
+| `copilot` | github default | none | (no built-in recovery) |
 
 Codex fallback chain editable in `run.py` (`CODEX_MODELS = […]`).
 
