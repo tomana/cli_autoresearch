@@ -65,6 +65,20 @@ uv run run.py --cwd /path/to/your/project program.md
 
 Codex fallback chain editable in `run.py` (`CODEX_MODELS = […]`).
 
+### Authenticating the backends
+
+Sign in once with each CLI's own login flow (they run on your
+existing subscription). Docs:
+
+- [claude](https://docs.anthropic.com/en/docs/claude-code/setup)
+- [codex](https://github.com/openai/codex#authentication)
+- [copilot](https://docs.github.com/en/copilot/concepts/agents/about-copilot-coding-agent)
+- [agy](https://antigravity.google/docs)
+
+For unattended `copilot` runs, set `COPILOT_GITHUB_TOKEN` to a
+[fine-grained PAT](https://github.com/settings/personal-access-tokens)
+with only **Copilot Requests: Read-only** (no repo access).
+
 ## What gets written to disk
 
 **`run.py` itself writes nothing.** No run dirs, no logs, no
