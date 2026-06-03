@@ -59,7 +59,7 @@ uv run run.py --cwd /path/to/your/project program.md
 | Agent | Default model | Tier fallback | Recovery |
 |---|---|---|---|
 | `claude` | `claude-opus-4-8` | none | rate-limit reset detected via stdout regex, waits + restarts budget |
-| `codex` | `gpt-5.5-pro` | → `gpt-5.5` → `gpt-5.4-mini` | scans `~/.codex/sessions/rollout-*.jsonl` for `credits.has_credits=false` and degrades the active tier |
+| `codex` | `gpt-5.5` | → `gpt-5.4-mini` | scans `~/.codex/sessions/rollout-*.jsonl` for `credits.has_credits=false` and degrades the active tier |
 | `agy` (antigravity) | google default | none | (no built-in recovery) |
 | `copilot` | github default | none | (no built-in recovery) |
 

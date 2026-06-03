@@ -34,7 +34,7 @@ for v in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT",
     os.environ.pop(v, None)
 
 CLAUDE_MODEL  = "claude-opus-4-8"
-CODEX_MODELS  = ["gpt-5.5-pro", "gpt-5.5", "gpt-5.4-mini"]   # tier fallback
+CODEX_MODELS  = ["gpt-5.5", "gpt-5.4-mini"]   # tier fallback (no -pro: credits-wallet only, errors 400 on ChatGPT plans)
 _codex_idx    = 0
 
 _active_proc, _interrupts = None, 0
